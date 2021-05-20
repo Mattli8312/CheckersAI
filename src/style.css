@@ -1,0 +1,20 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background: black;
+}
+.navbar{
+    display: flex;
+    justify-content: space-around;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    color: white;
+    font-size: 2em;
+    padding: 0.5em; 
+}
+
+#grid{
+    display: flex;
+    flex-wrap: wrap;
+    margin: auto;
+}

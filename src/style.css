@@ -18,3 +18,9 @@
     flex-wrap: wrap;
     margin: auto;
 }
+
+#grid div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

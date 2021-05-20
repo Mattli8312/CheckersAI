@@ -1,14 +1,14 @@
 /**
  * Main js component used to render the application
  */
-
-
-
+const tile_width = (innerHeight * 0.8 * 0.125);
+const board_width = 8;
+const board_height = 8;
 /**
  * Simple Utility method used for rendering the game board
- * @param {*} game_board 
- * @param {*} width_ 
- * @param {*} height_ 
+ * @param {*} game_board 2d array representing the location of every piece on the board and storing for AI analysis
+ * @param {*} width_  8 tiles
+ * @param {*} height_ 8 tiles
  */
 function Initialize_grid(game_board, width_, height_){
     let body = document.getElementById('grid');
@@ -20,7 +20,6 @@ function Initialize_grid(game_board, width_, height_){
 
     let current_piece = pieces.R;
     let current_color = "white";
-    let tile_width = (innerHeight * 0.8 * 0.125);
 
     body.style.width = tile_width * 8;
     body.style.height = tile_width * 8;
@@ -64,10 +63,11 @@ function Initialize_grid(game_board, width_, height_){
             
 
             //Change the color
-            current_color  = current_color == "white" ? "red" : "white";
+            current_color  = current_color == "white" ? "brown" : "white";
 
             //Initialize the grid div
             let tile_ = document.createElement('div');
+            tile_.setAttribute("id", a + ',' + b);
             tile_.style.background = current_color;
             tile_.style.top = a * tile_width;
             tile_.style.left = b * tile_width
@@ -78,13 +78,30 @@ function Initialize_grid(game_board, width_, height_){
     return game_board;
 }
 
+/**
+ * Utility function used to render the pieces
+ * @param {*} game_board 2d array with game pieces
+ */
+function InitializeGamePieces(game_board){
+    for(var a = 0; a < 8; a++){
+        for(var b = 0; b < 8; b++){
+            if(game_board[a][b] == 'R'){
+                let piece = new Piece("red", 1, false, b, a, tile_width * 0.75);
+                piece.render_piece();
+            }
+            if(game_board[a][b] == 'B'){
+                let piece = new Piece("black", -1, false, b, a, tile_width * 0.75);
+                piece.render_piece();
+            }
+        }
+    }
+}
+
 function main(){
-    const board_width = 8;
-    const board_height = 8;
     
     let game_board = [];
     game_board = Initialize_grid(game_board, board_width, board_height);
-    console.log(game_board);
+    InitializeGamePieces(game_board);
 }
 
 main();

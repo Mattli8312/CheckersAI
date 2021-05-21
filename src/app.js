@@ -1,6 +1,7 @@
 /**
  * Main js component used to render the application
  */
+let game_board = [];
 const tile_width = (innerHeight * 0.8 * 0.125);
 const board_width = 8;
 const board_height = 8;
@@ -10,7 +11,7 @@ const board_height = 8;
  * @param {*} width_  8 tiles
  * @param {*} height_ 8 tiles
  */
-function Initialize_grid(game_board, width_, height_){
+function Initialize_grid(width_, height_){
     let body = document.getElementById('grid');
     let pieces = {
         R: 'R',
@@ -82,7 +83,7 @@ function Initialize_grid(game_board, width_, height_){
  * Utility function used to render the pieces
  * @param {*} game_board 2d array with game pieces
  */
-function InitializeGamePieces(game_board){
+function InitializeGamePieces(){
     for(var a = 0; a < 8; a++){
         for(var b = 0; b < 8; b++){
             if(game_board[a][b] == 'R'){
@@ -98,10 +99,8 @@ function InitializeGamePieces(game_board){
 }
 
 function main(){
-    
-    let game_board = [];
-    game_board = Initialize_grid(game_board, board_width, board_height);
-    InitializeGamePieces(game_board);
+    game_board = Initialize_grid(board_width, board_height);
+    InitializeGamePieces();
 }
 
 main();

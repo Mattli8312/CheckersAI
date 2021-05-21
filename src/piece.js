@@ -4,6 +4,7 @@
  */
 
 let moves = [];
+let captures = [];
 
 class Piece{
     /**
@@ -40,6 +41,7 @@ class Piece{
         })
         piece.addEventListener("click", () =>{
             this.Calculate_moves();
+            this.CalculateAttacks();
             //Render the possible moves\
         })
         curr_tile.appendChild(piece);
@@ -51,63 +53,53 @@ class Piece{
             let tile = document.getElementById(curr_move.cur_y + ',' + curr_move.cur_x);
             tile.removeChild(tile.lastChild);
         }
-
-        let stack = []; //Using a stack to DFS through the grid
-        if(this.color == "red"){ //Red's turn
-            stack.push([this.y, this.x]);
-            while(stack.length > 0){
-                let curr_ = stack.pop();
-                let x_ = curr_[1], y_ = curr_[0];
-                if(y_ + 1 < board_height){
-                    if(x_ + 1 < board_width){//If not reserved
-                        if(game_board[y_+1][x_+1] == ' ')
-                            moves.push({
-                                cur_x: x_ + 1,
-                                cur_y: y_ + 1,
-                                mas_x: x_,
-                                mas_y: y_,
-                                cap_x: -1,
-                                cap_y: -1 //-1 indicates no capture
-                            });
-                        else if(game_board[y_+1][x_+1] == 'B'){
-                            if(y_+2 < board_height && x_ + 1 < board_width && grid[y_+2][x_+2] == ' '){
-                                moves.push({
-                                    cur_x: x_ + 2,
-                                    cur_y: y_ + 2,
-                                    mas_x: x_,
-                                    mas_y: y_,
-                                    cap_x: x_ + 1,
-                                    cap_y: y_ + 1
-                                });
-                                stack.push([y_ + 2, x_ + 2]);
-                            }
-                        }
-                    }
-                    if(x_ - 1 > -1){//If not reserved
-                        if(game_board[y_+1][x_-1] == ' ')
-                            moves.push({
-                                cur_x: x_ - 1,
-                                cur_y: y_ + 1,
-                                mas_x: x_,
-                                mas_y: y_,
-                                cap_x: -1,
-                                cap_y: -1 //-1 indicates no capture
-                            });
-                        else if(game_board[y_+1][x_-1] == 'B'){
-                            if(y_+2 < board_height && x_ - 1 < board_width && grid[y_+2][x_-2] == ' '){
-                                moves.push({
-                                    cur_x: x_ - 2,
-                                    cur_y: y_ + 2,
-                                    mas_x: x_,
-                                    mas_y: y_,
-                                    cap_x: x_ - 1,
-                                    cap_y: y_ + 1
-                                });
-                                stack.push([y_ + 2, x_ - 2]);
-                            }
-                        }
-                    }
-                }
+        let x_ = this.x, y_ = this.y;
+        if(this.color == "red" && y_ + 1 < board_height){
+            if(x_ + 1 < board_width){//If not reserved
+                if(game_board[y_+1][x_+1] == ' ')
+                    moves.push({
+                        cur_x: x_ + 1,
+                        cur_y: y_ + 1,
+                        mas_x: x_,
+                        mas_y: y_,
+                        cap_x: -1,
+                        cap_y: -1 //-1 indicates no capture
+                    });
+            }
+            if(x_ - 1 > -1){//check left side
+                if(game_board[y_+1][x_-1] == ' ')
+                    moves.push({
+                        cur_x: x_ - 1,
+                        cur_y: y_ + 1,
+                        mas_x: x_,
+                        mas_y: y_,
+                        cap_x: -1,
+                        cap_y: -1 //-1 indicates no capture
+                    });
+            }
+        }
+        else if(this.color == "black" && y_ - 1 > -1){
+            if(x_ + 1 < board_width){//If not reserved
+                if(game_board[y_-1][x_+1] == ' ')
+                    moves.push({
+                        cur_x: x_ + 1,
+                        cur_y: y_ - 1,
+                        mas_x: x_,
+                        mas_y: y_,
+                        cap_x: -1,
+                        cap_y: -1 //-1 indicates no capture
+                    });
+            }
+            if(x_ - 1 > -1){//If not reserved
+                if(game_board[y_-1][x_-1] == ' ')
+                    moves.push({
+                        cur_x: x_ - 1,
+                        cur_y: y_ - 1,
+                        mas_x: x_,
+                        mas_y: y_,
+                        cap_x: -1,
+                        cap_y: -1 //-1 indicates no capture
+                    });
             }
         }
         //render the pseudo nodes
@@ -117,6 +109,89 @@ class Piece{
             pseudopiece.render();
         }
         console.log(moves);
+    }
+
+    CalculateAttacks(){
+
+        while(captures.length){
+            let curr_move = captures.pop();
+            let tile = document.getElementById(curr_move.cur_y + ',' + curr_move.cur_x);
+            tile.removeChild(tile.lastChild);
+        }
+        let stack = []; //Using a stack to DFS through the game_board
+        stack.push([this.y, this.x]);
+        console.log("here")
+        while(stack.length > 0){
+            let curr_ = stack.pop();
+            let x_ = curr_[1], y_ = curr_[0];
+            if(this.color == "red" && y_ + 2 < board_height){
+                if(x_ + 2 < board_width){//If not reserved
+                    if(game_board[y_+1][x_+1] == 'B' && game_board[y_+2][x_+2] == ' '){
+                        console.log("here")
+                        console.log(y_+1);
+                        console.log(x_+1);
+                        captures.push({
+                            cur_x: x_ + 2,
+                            cur_y: y_ + 2,
+                            mas_x: x_,
+                            mas_y: y_,
+                            cap_x: x_+1,
+                            cap_y: y_+1 //-1 indicates no capture
+                        });
+                        //Push to the stack
+                        stack.push([y_ + 2, x_ + 2]);
+                    }
+                }
+                if(x_ - 2 > -1){//check left side
+                    if(game_board[y_+1][x_-1] == 'B' && game_board[y_+2][x_-2] == ' '){
+                        captures.push({
+                            cur_x: x_ - 2,
+                            cur_y: y_ + 2,
+                            mas_x: x_,
+                            mas_y: y_,
+                            cap_x: x_-1,
+                            cap_y: y_+1 //-1 indicates no capture
+                        });
+                        stack.push([y_ + 2, x_ - 2]);
+                    }
+                }
+            }
+            else if(this.color == "black" && y_ - 2 > -1){
+                if(x_ + 2 < board_width){//If not reserved
+                    if(game_board[y_-1][x_+1] == 'R' && game_board[y_-2][x_+2] == ' '){
+                        captures.push({
+                            cur_x: x_ + 2,
+                            cur_y: y_ - 2,
+                            mas_x: x_,
+                            mas_y: y_,
+                            cap_x: x_+1,
+                            cap_y: y_-1 //-1 indicates no capture
+                        });
+                        stack.push([y_ - 2, x_ + 2]);
+                    }
+                }
+                if(x_ - 2 > -1){//If not reserved
+                    if(game_board[y_-1][x_-1] == 'R' && game_board[y_-2][x_-2] == ' '){
+                        captures.push({
+                            cur_x: x_ - 2,
+                            cur_y: y_ - 2,
+                            mas_x: x_,
+                            mas_y: y_,
+                            cap_x: x_-1,
+                            cap_y: y_-1 //-1 indicates no capture
+                        });
+                        stack.push([y_ - 2, x_ - 2]);
+                    }
+                }
+            }
+        }
+        //render the pseudo nodes
+        for(var a = 0; a < captures.length; a++){
+            console.log(captures[a])
+            let pseudopiece = new PseudoNodes(captures[a].cur_x, captures[a].cur_y, captures[a].mas_x, captures[a].mas_y, this.color, this.width, this.direction);
+            pseudopiece.render();
+        }
+        console.log(captures);
     }
 }
 
@@ -140,15 +215,26 @@ class PseudoNodes{
         placeholder.addEventListener('click', () => 
         {
             let tile = document.getElementById(this.prev_y + ',' + this.prev_x);
+            console.log(this.prev_x)
+            console.log(this.prev_y)
+            let checker = game_board[this.prev_y][this.prev_x];
             if(tile.firstChild)
                 tile.removeChild(tile.firstChild);
+            game_board[this.prev_y][this.prev_x] = ' ';
             while(moves.length){
                 let curr_ = moves.pop();
                 let pseudo_ = document.getElementById(curr_.cur_y + ',' + curr_.cur_x);
                 if(pseudo_.firstChild)
                     pseudo_.removeChild(pseudo_.firstChild);
             }
+            while(captures.length){
+                let curr_ = captures.pop();
+                let pseudo_ = document.getElementById(curr_.cur_y + ',' + curr_.cur_x);
+                if(pseudo_.firstChild)
+                    pseudo_.removeChild(pseudo_.firstChild);
+            }
             let new_piece = new Piece(this.color, this.direction, false, this.x_, this.y_, this.tile_width)
+            game_board[this.y_][this.x_] = checker;
             new_piece.render_piece();
         });
         tile.appendChild(placeholder);

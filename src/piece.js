@@ -188,7 +188,6 @@ class Piece{
         //render the pseudo nodes
         for(var a = 0; a < captures.length; a++){
             //console.log(captures[a])
-            console.log("pass")
             let pseudopiece = new PseudoNodes(captures[a].cur_x, captures[a].cur_y, this.x, this.y, this.color, this.width, this.direction, true);
             pseudopiece.render();
         }
@@ -224,7 +223,7 @@ class PseudoNodes{
         placeholder.addEventListener('click', () => 
         {
             //we need to backtrack to actually capture pieces if necessary
-            console.log(this.captured)
+            // console.log(this.captured)
             if(this.captured){
                 for(var a = 0; a < captures.length; a++){
                     if(captures[a].cur_x == this.x_ && captures[a].cur_y == this.y_){
@@ -233,9 +232,12 @@ class PseudoNodes{
                         let curr_y = captures[a].cur_y;
                         game_board[curr_y][curr_x] = this.color == "red" ? 'R' : 'B';
                         game_board[this.o_y][this.o_x] = ' ';
-                        while(curr_x != this.o_x && curr_y != this.o_y){
+                        while(curr_x != this.o_x || curr_y != this.o_y){
                             for(var a = 0; a < captures.length; a++){
+                                // console.log("flag")
                                 if(curr_x == captures[a].cur_x && curr_y == captures[a].cur_y){
+                                    // console.log("flag")
+                                    // console.log(captures[a]);
                                     let tile = document.getElementById(captures[a].cap_y + ',' + captures[a].cap_x)
                                     game_board[captures[a].cap_y][captures[a].cap_x] = ' ';
                                     if(tile.firstChild)
@@ -249,7 +251,7 @@ class PseudoNodes{
                 }
                 //update new piece
                 let old_tile = document.getElementById(this.o_y + ',' + this.o_x);
-                console.log(old_tile)
+                // console.log(old_tile)
                 if(old_tile.firstChild)
                     old_tile.removeChild(old_tile.firstChild);
                 let new_checker = new Piece(this.color, this.direction, false, this.x_, this.y_, this.tile_width);
@@ -257,7 +259,7 @@ class PseudoNodes{
             }
             else{
                 //Just move the current tile to it's new location
-                console.log("not captured");
+                // console.log("not captured");
                 for(var a = 0; a < moves.length; a++){
                     if(moves[a].cur_x == this.x_ && moves[a].cur_y == this.y_){
                         let prev_tile = document.getElementById(moves[a].mas_y + ',' + moves[a].mas_x);

@@ -19,6 +19,10 @@ class Piece{
         this.color = color;
         this.direction = direction;
         this.is_king = is_king;
+        if(color == "red" && y_== board_height - 1)
+            this.is_king = true;
+        if(color == "black" && y_ == 0)
+            this.is_king = true;
         this.x = x_;
         this.y = y_;
         this.width = tile_width;
@@ -31,7 +35,14 @@ class Piece{
         piece.style.width = this.width;
         piece.style.height = this.width;
         piece.style.borderRadius = "50%";
-
+        piece.setAttribute("class", "piece");
+        if(this.is_king){
+            let img_ = document.createElement('i');
+            img_.setAttribute("class", "fas fa-crown");
+            img_.style.zIndex = "front";
+            img_.style.background = this.color;
+            piece.appendChild(img_);
+        }
         //piece selected
         piece.addEventListener("mouseover", () =>{
             piece.style.border = "solid 5px white";
@@ -54,7 +65,7 @@ class Piece{
             tile.removeChild(tile.lastChild);
         }
         let x_ = this.x, y_ = this.y;
-        if(this.color == "red" && y_ + 1 < board_height){
+        if((this.color == "red" || this.is_king) && y_ + 1 < board_height){
             if(x_ + 1 < board_width){//If not reserved
                 if(game_board[y_+1][x_+1] == ' ')
                     moves.push({
@@ -74,7 +85,7 @@ class Piece{
                     });
             }
         }
-        else if(this.color == "black" && y_ - 1 > -1){
+        if((this.color == "black" || this.is_king) && y_ - 1 > -1){
             if(x_ + 1 < board_width){//If not reserved
                 if(game_board[y_-1][x_+1] == ' ')
                     moves.push({
@@ -97,7 +108,7 @@ class Piece{
         //render the pseudo nodes
         for(var a = 0; a < moves.length; a++){
             //console.log(moves[a])
-            let pseudopiece = new PseudoNodes(moves[a].cur_x, moves[a].cur_y, this.x, this.y, this.color, this.width, this.direction, false);
+            let pseudopiece = new PseudoNodes(moves[a].cur_x, moves[a].cur_y, this.x, this.y, this.color, this.width, this.direction, false, this.is_king);
             pseudopiece.render();
         }
         //console.log(moves);
@@ -113,15 +124,13 @@ class Piece{
         let stack = []; //Using a stack to DFS through the game_board
         stack.push([this.y, this.x]);
         //console.log("here")
+        let targets = this.color == "red" ? 'B' : 'R';
         while(stack.length > 0){
             let curr_ = stack.pop();
             let x_ = curr_[1], y_ = curr_[0];
-            if(this.color == "red" && y_ + 2 < board_height){
+            if((this.color == "red" || this.is_king) && y_ + 2 < board_height){
                 if(x_ + 2 < board_width){//If not reserved
-                    if(game_board[y_+1][x_+1] == 'B' && game_board[y_+2][x_+2] == ' '){
-                        //console.log("here")
-                        //console.log(y_+1);
-                        //console.log(x_+1);
+                    if(game_board[y_+1][x_+1] == targets && game_board[y_+2][x_+2] == ' '){
                         if(!this.Visited(x_+2, y_+2)){
                             captures.push({
                                 cur_x: x_ + 2,
@@ -137,7 +146,7 @@ class Piece{
                     }
                 }
                 if(x_ - 2 > -1){//check left side
-                    if(game_board[y_+1][x_-1] == 'B' && game_board[y_+2][x_-2] == ' '){
+                    if(game_board[y_+1][x_-1] == targets && game_board[y_+2][x_-2] == ' '){
                         if(!this.Visited(x_-2, y_+2)){
                             captures.push({
                                 cur_x: x_ - 2,
@@ -152,9 +161,9 @@ class Piece{
                     }
                 }
             }
-            else if(this.color == "black" && y_ - 2 > -1){
+            if((this.color == "black" || this.is_king) && y_ - 2 > -1){
                 if(x_ + 2 < board_width){//If not reserved
-                    if(game_board[y_-1][x_+1] == 'R' && game_board[y_-2][x_+2] == ' '){
+                    if(game_board[y_-1][x_+1] == targets && game_board[y_-2][x_+2] == ' '){
                         if(!this.Visited(x_+2, y_-2)){
                             captures.push({
                                 cur_x: x_ + 2,
@@ -169,7 +178,7 @@ class Piece{
                     }
                 }
                 if(x_ - 2 > -1){//If not reserved
-                    if(game_board[y_-1][x_-1] == 'R' && game_board[y_-2][x_-2] == ' '){
+                    if(game_board[y_-1][x_-1] == targets && game_board[y_-2][x_-2] == ' '){
                         if(!this.Visited(x_-2, y_-2)){
                             captures.push({
                                 cur_x: x_ - 2,
@@ -188,7 +197,7 @@ class Piece{
         //render the pseudo nodes
         for(var a = 0; a < captures.length; a++){
             //console.log(captures[a])
-            let pseudopiece = new PseudoNodes(captures[a].cur_x, captures[a].cur_y, this.x, this.y, this.color, this.width, this.direction, true);
+            let pseudopiece = new PseudoNodes(captures[a].cur_x, captures[a].cur_y, this.x, this.y, this.color, this.width, this.direction, true, this.is_king);
             pseudopiece.render();
         }
         //console.log(captures);
@@ -203,7 +212,7 @@ class Piece{
 }
 
 class PseudoNodes{
-    constructor(x_, y_, original_x, original_y, color, tile_width, direction, captured){
+    constructor(x_, y_, original_x, original_y, color, tile_width, direction, captured, is_king){
         this.x_ = x_;
         this.y_ = y_;
         this.o_x = original_x
@@ -211,7 +220,8 @@ class PseudoNodes{
         this.captured = captured
         this.tile_width = tile_width;
         this.color = color;
-        this.direction = direction
+        this.direction = direction;
+        this.is_king = is_king;
     }
     render(){
         let tile = document.getElementById(this.y_ + ',' + this.x_);
@@ -254,7 +264,7 @@ class PseudoNodes{
                 // console.log(old_tile)
                 if(old_tile.firstChild)
                     old_tile.removeChild(old_tile.firstChild);
-                let new_checker = new Piece(this.color, this.direction, false, this.x_, this.y_, this.tile_width);
+                let new_checker = new Piece(this.color, this.direction, this.is_king, this.x_, this.y_, this.tile_width);
                 new_checker.render_piece();
             }
             else{
@@ -265,7 +275,7 @@ class PseudoNodes{
                         let prev_tile = document.getElementById(moves[a].mas_y + ',' + moves[a].mas_x);
                         if(prev_tile.firstChild)
                             prev_tile.removeChild(prev_tile.firstChild);
-                        let new_piece= new Piece(this.color, this.direction, false, this.x_, this.y_, this.tile_width);
+                        let new_piece= new Piece(this.color, this.direction, this.is_king, this.x_, this.y_, this.tile_width);
                         new_piece.render_piece();
                         game_board[moves[a].mas_y][moves[a].mas_x] = ' ';
                         break;

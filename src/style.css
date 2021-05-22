@@ -13,6 +13,14 @@
     padding: 0.5em; 
 }
 
+.piece{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 1em;
+}
+
 #grid{
     display: flex;
     flex-wrap: wrap;

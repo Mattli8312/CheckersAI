@@ -16,3 +16,9 @@
     - Used a stack and implemented backtracking iteratively
 -Utilized static member to hold capture moves and normal moves
 -Utilized Pseudo Node for selecting specific moves
+
+### May 22st 2021
+
+-Implemented King movement
+-Render crown icon on king pieces using font awesome
+-Rewrote conditional statements for efficient code

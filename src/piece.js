@@ -45,14 +45,23 @@ class Piece{
         }
         //piece selected
         piece.addEventListener("mouseover", () =>{
-            piece.style.border = "solid 5px white";
+            if(this.color == "black" && current_player == current_pl.Player_Black)
+                piece.style.border = "solid white 5px";
+            else if(this.color == "red" && current_player == current_pl.Player_Red)
+                piece.style.border = "solid white 5px";
         })
         piece.addEventListener("mouseleave", () =>{
             piece.style.border = "none";
         })
         piece.addEventListener("click", () =>{
-            this.Calculate_moves();
-            this.CalculateAttacks();
+            if(this.color == "black" && current_player == current_pl.Player_Black){
+                this.Calculate_moves();
+                this.CalculateAttacks();
+            }
+            else if(this.color == "red" && current_player == current_pl.Player_Red){
+                this.Calculate_moves();
+                this.CalculateAttacks();
+            }
             //Render the possible moves\
         })
         curr_tile.appendChild(piece);
@@ -252,6 +261,7 @@ class PseudoNodes{
                                     game_board[captures[a].cap_y][captures[a].cap_x] = ' ';
                                     if(tile.firstChild)
                                         tile.removeChild(tile.firstChild);
+                                    this.color == "black" ? red_pieces -- : black_pieces --;
                                     curr_x = captures[a].mas_x;
                                     curr_y = captures[a].mas_y;
                                 }
@@ -296,6 +306,15 @@ class PseudoNodes{
                 let tile = document.getElementById(curr_.cur_y + ',' + curr_.cur_x);
                 if(tile.firstChild);
                     tile.removeChild(tile.firstChild);
+            }
+            current_player = this.color == "red" ? current_pl.Player_Black : current_pl.Player_Red;
+            if(red_pieces < 1){
+                current_winner = current_w.Black_won;
+                winner("rgba(50,50,50,0.2)");
+            }
+            if(black_pieces < 1){
+                current_winner = current_w.Red_won;
+                winner("rgba(255,0,0,0.2)");
             }
         });
         tile.appendChild(placeholder);

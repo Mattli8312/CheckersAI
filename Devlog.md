@@ -22,3 +22,5 @@
 -Implemented King movement
 -Render crown icon on king pieces using font awesome
 -Rewrote conditional statements for efficient code
+-Finished graphical UI and added features such as how-to-play, settings, and game modes
+-Completed GamePlay and state machine determining whether there is a winner and which players turn it is

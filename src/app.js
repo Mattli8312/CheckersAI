@@ -2,12 +2,13 @@
  * Main js component used to render the application
  */
 let game_board = [];
+let current_player, current_winner;
+let red_pieces, black_pieces;
 const tile_width = (innerHeight * 0.8 * 0.125);
 const board_width = 8;
 const board_height = 8;
 /**
  * Simple Utility method used for rendering the game board
- * @param {*} game_board 2d array representing the location of every piece on the board and storing for AI analysis
  * @param {*} width_  8 tiles
  * @param {*} height_ 8 tiles
  */
@@ -81,7 +82,6 @@ function Initialize_grid(width_, height_){
 
 /**
  * Utility function used to render the pieces
- * @param {*} game_board 2d array with game pieces
  */
 function InitializeGamePieces(){
     for(var a = 0; a < 8; a++){
@@ -98,9 +98,60 @@ function InitializeGamePieces(){
     }
 }
 
+/**
+ * Utility function reset the grid. Mainly for starting a new game
+ */
+function ResetGrid(){
+    let body = document.getElementById("grid");
+    while(body.firstChild){
+        body.removeChild(body.firstChild);
+    }
+    if(game_board.length > 0){
+        for(var a = 7; a > -1; a--){
+            while(game_board[a].length)
+                game_board[a].pop();
+            game_board.pop();
+        }
+    }
+}
+
+function winner(color){
+    let winner_screen = document.createElement("div");
+    winner_screen.setAttribute("id", "winner_screen");
+    winner_screen.style.background = color;
+    winner_screen.style.width = board_width * tile_width;
+    winner_screen.style.height = board_height * tile_width;
+    winner_screen.style.position = "absolute";
+    winner_screen.style.margin = "auto";
+    winner_screen.innerHTML = current_winner;
+    winner_screen.style.fontSize = "10vh";
+    document.getElementById("grid").appendChild(winner_screen);
+}
+
 function main(){
+    current_player = current_pl.Player_Black;
+    current_winner = current_w.NuLL;
+    red_pieces = black_pieces = 12;
+    let list = document.getElementsByClassName("main_page_enabled");
+    for(var i = 0; i < list.length; i++)
+        list[i].setAttribute("class", "main_page_disabled")
+    ResetGrid();
     game_board = Initialize_grid(board_width, board_height);
     InitializeGamePieces();
 }
 
-main();
+/**
+ * Implement the state machine i.e. which player goes first && what happend when a player loses all their checkers
+ * In checkers, black goes first
+ */
+
+let current_pl = {
+    Player_Red: "p2_red",
+    Player_Black: "p1_black"
+}
+
+let current_w = {
+    Red_won: "Red Won!",
+    Black_won: "Black Won!",
+    NuLL: "Null"
+}

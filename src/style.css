@@ -2,14 +2,16 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+#body{
     background: black;
 }
 .navbar{
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     color: white;
-    font-size: 2em;
+    font-size: 3em;
     padding: 0.5em; 
 }
 
@@ -31,4 +33,41 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.main_page_enabled div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items:center;
+    background: white;
+    width: 20vw;
+    font-size: 2em;
+    padding: 0.5em;
+    margin: 2em 40vw;
+    cursor: pointer;
+    border-radius: 1vw;
+    transition: ease-in 0.2s;
+}
+
+a{
+    text-decoration: none;
+    color: black;
+}
+
+a:hover{
+    color:white;
+}
+
+.main_page_enabled div:hover{
+    border-radius: 3vw;
+    width: 25vw;
+    margin: 2em 37.5vw;
+    background: black;
+    border: 1px solid white;
+    color: white;
+}
+
+.main_page_disabled{
+    display: none;
 }

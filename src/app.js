@@ -129,21 +129,34 @@ function winner(color){
 }
 
 function main(){
+    //reset all conditions and states
     current_player = current_pl.Player_Black;
     current_winner = current_w.NuLL;
     red_pieces = black_pieces = 12;
-    let list = document.getElementsByClassName("main_page_enabled");
-    for(var i = 0; i < list.length; i++)
-        list[i].setAttribute("class", "main_page_disabled")
+    //Enable and disable certain pages
+    document.getElementsByClassName("main_page_enabled")[0].setAttribute("class", "main_page_disabled");
+    document.getElementsByClassName("backbutton")[0].setAttribute("id", "enabled");
+    document.getElementsByClassName("newgame")[0].setAttribute("id", "enabled");
+    
     ResetGrid();
     game_board = Initialize_grid(board_width, board_height);
     InitializeGamePieces();
 }
 
+function home(){
+    //Reset the Grid;
+    ResetGrid();
+    //Disable game buttons
+    document.getElementsByClassName("backbutton")[0].setAttribute("id", "disabled");
+    document.getElementsByClassName("newgame")[0].setAttribute("id", "disabled");
+    //Enable home page
+    document.getElementsByClassName("main_page_disabled")[0].setAttribute("class", "main_page_enabled");
+}
 /**
  * Implement the state machine i.e. which player goes first && what happend when a player loses all their checkers
  * In checkers, black goes first
  */
+
 
 let current_pl = {
     Player_Red: "p2_red",

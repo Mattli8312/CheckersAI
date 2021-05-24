@@ -40,7 +40,6 @@
     flex-direction: column;
     justify-content: center;
     align-items:center;
-    background: white;
     width: 20vw;
     font-size: 2em;
     padding: 0.5em;
@@ -52,22 +51,50 @@
 
 a{
     text-decoration: none;
-    color: black;
 }
 
-a:hover{
-    color:white;
-}
 
 .main_page_enabled div:hover{
     border-radius: 3vw;
     width: 25vw;
     margin: 2em 37.5vw;
-    background: black;
-    border: 1px solid white;
-    color: white;
 }
 
 .main_page_disabled{
+    display: none;
+}
+
+.backbutton{
+    top: 0; left: 0;
+}
+
+.newgame{
+    top:0px; 
+    right: 0;
+}
+
+.backbutton, .newgame{
+    cursor: pointer;
+    position: absolute;
+    text-align: center;
+    font-size: 1em;
+    margin: 1vw;
+    padding: 1em;
+    border-radius: 1vw;
+}
+
+#enabled{
+    color: black;
+    background: white;
+    transition: ease-in 0.2s;
+}
+
+#enabled:hover{
+    color: white;
+    background: black;
+    border: 1px solid white;
+}
+
+#disabled{
     display: none;
 }

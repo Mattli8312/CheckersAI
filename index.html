@@ -13,11 +13,13 @@
         <i class="fab fa-github" id = "tag"></i>
     </div>
     <div class="main_page_enabled">
-        <div class="button"><a href="https://www.ducksters.com/games/checkers_rules.php">How To Play</a></div>
-        <div class="button">Settings</div>
-        <div class="button" onclick="main()">1v1</div>
-        <div class="button">1vCPU</div>
+        <div class="button" id="enabled"><a href="https://www.ducksters.com/games/checkers_rules.php">How To Play</a></div>
+        <div class="button" id="enabled" onclick="">Settings</div>
+        <div class="button" id="enabled"onclick="main()">1v1</div>
+        <div class="button" id="enabled">1vCPU</div>
     </div>
+    <div class="backbutton" id="disabled" onclick="home()">Back</div>
+    <div class="newgame" id="disabled" onclick="main()">NewGame</div>
     <div id="grid">
     </div>
     <script src="src/piece.js"></script>

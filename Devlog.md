@@ -24,3 +24,11 @@
 -Rewrote conditional statements for efficient code
 -Finished graphical UI and added features such as how-to-play, settings, and game modes
 -Completed GamePlay and state machine determining whether there is a winner and which players turn it is
+
+### May 22nd 2021
+
+-**Wrap up UI and start AI Algorithm!**
+-Implemented state machine for which stage we are in, whether it is the main page, the game page, or the settings page.
+-Impelemented control buttons to revert back in-between different states
+-Implemented UI features in the settings function.
+-Saving UI features for later!
